@@ -4,7 +4,9 @@ const Student = require("../models/student");
 
 //setup get method
 router.get("/student", (req, res) => {
-  res.send({ type: "Get" });
+  Student.find({}).then(student => {
+    res.send(student);
+  });
 });
 
 //setup post method
@@ -15,13 +17,19 @@ router.post("/student", (req, res) => {
 });
 
 //setup put method
-router.put("/student:id", (req, res) => {
-  res.send({ type: "Put" });
+router.put("/student/:id", (req, res) => {
+  Student.findByIdAndUpdate({ _id: req.params.id }, req.body).then(() => {
+    Student.findOne({ _id: req.params.id }).then(student => {
+      res.send(student);
+    });
+  });
 });
 
 //setup delete method
-router.delete("/student:id", (req, res) => {
-  res.send({ type: "Delete" });
+router.delete("/student/:id", (req, res) => {
+  Student.findByIdAndRemove({ _id: req.params.id }).then(student => {
+    res.send(student);
+  });
 });
 
 module.exports = router;
